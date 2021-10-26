@@ -35,9 +35,18 @@ class App extends React.Component {
     }
 
     handleCreateTask = (content) => {
-        this.setState({
-            todos: this.state.todos.concat([{ content, done: false }])
-        });
+        // this.setState({
+        //     todos: this.state.todos.concat([{ content, done: false }])
+        // });
+
+        if (content !== '') {
+            const todos = [...this.state.todos];
+            const notExist = todos.filter(tsk => tsk.content === content).length === 0;
+            if (notExist) {
+                todos.push({ content, done: false });
+                this.setState({ todos });
+            } else alert(`"${content}" is an task listed`);
+        } else alert('Fill task content pls');
     }
 
     render() {
@@ -48,7 +57,7 @@ class App extends React.Component {
                     <TodoList tasks={this.state.todos}
                         handleToogleStatus={this.handleToogleStatus}
                         handleDeleteTask={this.handleDeleteTask} />
-                    <Form handleCreateTask={this.handleCreateTask}/>
+                    <Form handleCreateTask={this.handleCreateTask} />
                     {/* {this.state.showButton && <button onClick={this.handleClickInit} className="button init">
                         Init
                     </button>} */}

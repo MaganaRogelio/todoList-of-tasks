@@ -13,6 +13,8 @@ function TodoList(props) {
                     key={index}
                     done={task.done}
                     content={task.content}
+                    handleToogleStatus={(e) => props.handleToogleStatus(e, index)}
+                    handleDeleteTask={(e) => props.handleDeleteTask(e, index)}
                 />
             )}
         </div>
@@ -20,7 +22,9 @@ function TodoList(props) {
 };
 
 TodoList.propTypes = {
-    tasks: PropTypes.array
+    tasks: PropTypes.array,
+    handleToogleStatus: PropTypes.func,
+    handleDeleteTask: PropTypes.func,
 }
 
 TodoList.defaultProps = {

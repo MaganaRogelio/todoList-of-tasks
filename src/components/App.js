@@ -25,12 +25,26 @@ class App extends React.Component {
         })
     }
 
+    handleToogleStatus = (e, item) => {
+        const todos = [...this.state.todos];
+        todos[item].done = !todos[item].done;
+        this.setState({ todos })
+    }
+
+    handleDeleteTask = (e, item) => {
+        const todos = [...this.state.todos];
+        todos.splice(item, 1);
+        this.setState({ todos })
+    }
+
     render() {
         return (
             <div className="wrapper">
                 <div className="card frame">
                     <Header counter={this.state.todos.length} />
-                    <TodoList tasks={this.state.todos} />
+                    <TodoList tasks={this.state.todos} 
+                    handleToogleStatus={this.handleToogleStatus}
+                    handleDeleteTask={this.handleDeleteTask} />
                     <Form />
                     {this.state.showButton && <button onClick={this.handleClickInit} className="button init">
                         Init

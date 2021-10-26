@@ -1,12 +1,17 @@
 import React from 'react';
 
-function Todo() {
-    return (
-        <div className="list-item">
-            Tarea
-            <button className="delete is-pulled-right" />
-        </div>
-    )
+class Todo extends React.Component {
+    state = {
+        done: true,
+    }
+    render() {
+        return (
+            <div className="list-item">
+                Tarea
+                <button className={`list-item ${this.state.done ? 'done' : ''}`} />
+            </div>
+        )
+    }
 };
 
 export default Todo;

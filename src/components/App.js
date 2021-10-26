@@ -5,23 +5,20 @@ import Form from './Form'
 import '../css/app.css'
 
 class App extends React.Component {
-    state = { todos: [], showButton: true }
+    state = { todos: [] }
 
-    handleClickInit = (e) => {
+    componentDidMount() {
         this.setState({
             todos: [
-                { content: "Tarea 1", done: true },
-                { content: "Tarea 2", done: false },
-                { content: "Tarea 3", done: true },
-                { content: "Tarea 4", done: false },
-                { content: "Tarea 5", done: true },
-                { content: "Tarea 6", done: false },
-                { content: "Tarea 7", done: true },
-                { content: "Tarea 8", done: false },
-                { content: "Tarea 9", done: true },
-                { content: "Tarea 10", done: false },
-            ],
-            showButton: false,
+                { content: "Sesión 1 (JSX)", done: true },
+                { content: "Sesión 2 (Estado y propiedades)", done: true },
+                { content: "Sesión 3 (Ciclo de vida)", done: true },
+                { content: "Sesión 4 (Hooks)", done: false },
+                { content: "Sesión 5 (Hooks)", done: false },
+                { content: "Sesión 6 (Rutas)", done: false },
+                { content: "Sesión 7 (PWA)", done: false },
+                { content: "Sesión 8 (Material UI)", done: false },
+            ]
         })
     }
 
@@ -37,18 +34,24 @@ class App extends React.Component {
         this.setState({ todos })
     }
 
+    handleCreateTask = (content) => {
+        this.setState({
+            todos: this.state.todos.concat([{ content, done: false }])
+        });
+    }
+
     render() {
         return (
             <div className="wrapper">
                 <div className="card frame">
                     <Header counter={this.state.todos.length} />
-                    <TodoList tasks={this.state.todos} 
-                    handleToogleStatus={this.handleToogleStatus}
-                    handleDeleteTask={this.handleDeleteTask} />
-                    <Form />
-                    {this.state.showButton && <button onClick={this.handleClickInit} className="button init">
+                    <TodoList tasks={this.state.todos}
+                        handleToogleStatus={this.handleToogleStatus}
+                        handleDeleteTask={this.handleDeleteTask} />
+                    <Form handleCreateTask={this.handleCreateTask}/>
+                    {/* {this.state.showButton && <button onClick={this.handleClickInit} className="button init">
                         Init
-                    </button>}
+                    </button>} */}
                 </div>
             </div>
         );

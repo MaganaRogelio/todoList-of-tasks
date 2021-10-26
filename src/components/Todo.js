@@ -1,4 +1,6 @@
 import React from 'react';
+import PropTypes from 'prop-types'
+import '../css/todo.css'
 
 class Todo extends React.Component {
     state = {
@@ -6,12 +8,16 @@ class Todo extends React.Component {
     }
     render() {
         return (
-            <div className="list-item">
+            <div className={`list-item ${this.props.done ? 'done' : ''}`}>
                 Tarea
-                <button className={`list-item ${this.state.done ? 'done' : ''}`} />
+                <button className="delete is-pulled-right" />
             </div>
         )
     }
 };
+
+Todo.propTypes = {
+    done: PropTypes.bool,
+}
 
 export default Todo;

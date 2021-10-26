@@ -7,9 +7,13 @@ function TodoList() {
 
     return (
         <div className="list-wrapper">
-            {todos.map(() =>
-                <Todo />
-            )}
+            {/* {todos.map(() =>
+                <Todo done />
+            )} */}
+            <Todo done />
+            <Todo />
+            <Todo done />
+            <Todo />
         </div>
     )
 };

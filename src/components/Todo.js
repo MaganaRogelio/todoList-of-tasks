@@ -3,21 +3,18 @@ import PropTypes from 'prop-types'
 import '../css/todo.css'
 import Checkmark from './Checkmark'
 
-class Todo extends React.Component {
-    state = {
-        done: true,
-    }
-    render() {
-        return (
-            <div className={`list-item ${this.props.done ? 'done' : ''}`}>
-                <Checkmark done={this.props.done}
-                    handleToogleStatus={this.props.handleToogleStatus} />
-                {this.props.content}
-                <button className="delete is-pulled-right"
-                    onClick={this.props.handleDeleteTask} />
-            </div>
-        )
-    }
+const Todo = (props) => {
+
+    return (
+        <div className={`list-item ${props.done ? 'done' : ''}`}>
+            <Checkmark done={props.done}
+                handleToogleStatus={props.handleToogleStatus} />
+            {props.content}
+            <button className="delete is-pulled-right"
+                onClick={props.handleDeleteTask} />
+        </div>
+    )
+
 };
 
 Todo.propTypes = {

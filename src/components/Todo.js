@@ -11,7 +11,7 @@ class Todo extends React.Component {
         return (
             <div className={`list-item ${this.props.done ? 'done' : ''}`}>
                 <Checkmark done={this.props.done}/>
-                Tarea
+                {this.props.content}
                 <button className="delete is-pulled-right" />
             </div>
         )
@@ -19,7 +19,8 @@ class Todo extends React.Component {
 };
 
 Todo.propTypes = {
-    done: PropTypes.bool,
+    done: PropTypes.bool.isRequired,
+    content: PropTypes.string.isRequired
 }
 
 export default Todo;

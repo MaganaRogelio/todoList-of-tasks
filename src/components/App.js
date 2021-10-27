@@ -1,70 +1,67 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './Header'
 import TodoList from './TodoList'
 import Form from './Form'
 import '../css/app.css'
 
-class App extends React.Component {
-    state = { todos: [] }
+const App = () => {
+    const [todos, setTodos] = useState([]);
+    const [show, setShow] = useState(true);
 
-    componentDidMount() {
-        this.setState({
-            todos: [
-                { content: "Sesión 1 (JSX)", done: true },
-                { content: "Sesión 2 (Estado y propiedades)", done: true },
-                { content: "Sesión 3 (Ciclo de vida)", done: true },
-                { content: "Sesión 4 (Hooks)", done: false },
-                { content: "Sesión 5 (Hooks)", done: false },
-                { content: "Sesión 6 (Rutas)", done: false },
-                { content: "Sesión 7 (PWA)", done: false },
-                { content: "Sesión 8 (Material UI)", done: false },
-            ]
-        })
+    useEffect(() => setTodos([
+        { content: "Sesión 1 (JSX)", done: true },
+        { content: "Sesión 2 (Estado y propiedades)", done: true },
+        { content: "Sesión 3 (Ciclo de vida)", done: true },
+        { content: "Sesión 4 (Hooks)", done: false },
+        { content: "Sesión 5 (Hooks)", done: false },
+        { content: "Sesión 6 (Rutas)", done: false },
+        { content: "Sesión 7 (PWA)", done: false },
+        { content: "Sesión 8 (Material UI)", done: false },
+    ]), []
+    )
+
+    const handleToogleStatus = (e, content) => {
+        const newTodos = [...todos];
+        const index = newTodos.findIndex(t => t.content === content);
+        if (index > -1) newTodos[index].done = !newTodos[index].done
+        setTodos(newTodos);
     }
 
-    handleToogleStatus = (e, item) => {
-        const todos = [...this.state.todos];
-        todos[item].done = !todos[item].done;
-        this.setState({ todos })
+    const handleDeleteTask = (e, content) => {
+        const newTodos = [...todos];
+        const index = newTodos.findIndex(t => t.content === content);
+        if (index > -1) newTodos.splice(index, 1);
+        setTodos(newTodos);
     }
 
-    handleDeleteTask = (e, item) => {
-        const todos = [...this.state.todos];
-        todos.splice(item, 1);
-        this.setState({ todos })
-    }
-
-    handleCreateTask = (content) => {
-        // this.setState({
-        //     todos: this.state.todos.concat([{ content, done: false }])
-        // });
-
+    const handleCreateTask = (content) => {
         if (content !== '') {
-            const todos = [...this.state.todos];
-            const notExist = todos.filter(tsk => tsk.content === content).length === 0;
-            if (notExist) {
-                todos.push({ content, done: false });
-                this.setState({ todos });
-            } else alert(`"${content}" is an task listed`);
+            const newTodos = [...todos];
+            const exist = newTodos.find(tsk => tsk.content === content);
+            if (exist) alert(`"${content}" is an task listed`)
+            else {
+                newTodos.push({ content, done: false });
+                setTodos(newTodos);
+            }
         } else alert('Fill task content pls');
     }
 
-    render() {
-        return (
-            <div className="wrapper">
-                <div className="card frame">
-                    <Header counter={this.state.todos.length} />
-                    <TodoList tasks={this.state.todos}
-                        handleToogleStatus={this.handleToogleStatus}
-                        handleDeleteTask={this.handleDeleteTask} />
-                    <Form handleCreateTask={this.handleCreateTask} />
-                    {/* {this.state.showButton && <button onClick={this.handleClickInit} className="button init">
-                        Init
-                    </button>} */}
-                </div>
+    const filtered = todos.filter(e => !e.done || e.done === show);
+
+    return (
+        <div className="wrapper">
+            <div className="card frame">
+                <Header counter={filtered.length}
+                    show={show}
+                    toogleDone={setShow} />
+                <TodoList tasks={filtered}
+                    handleToogleStatus={handleToogleStatus}
+                    handleDeleteTask={handleDeleteTask} />
+                <Form handleCreateTask={handleCreateTask} />
             </div>
-        );
-    }
+        </div>
+    );
 }
+
 
 export default App;

@@ -9,7 +9,7 @@ const Todo = (props) => {
         <div className={`list-item ${props.done ? 'done' : ''}`}>
             <Checkmark done={props.done}
                 handleToogleStatus={props.handleToogleStatus} />
-            {props.content}
+            {props.title}
             <button className="delete is-pulled-right"
                 onClick={props.handleDeleteTask} />
         </div>
@@ -19,7 +19,7 @@ const Todo = (props) => {
 
 Todo.propTypes = {
     done: PropTypes.bool.isRequired,
-    content: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
     handleToogleStatus: PropTypes.func,
     handleDeleteTask: PropTypes.func,
 }

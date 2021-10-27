@@ -36,7 +36,6 @@ const App = () => {
     const handleToogleStatus = async (e, content) => {
 
         const task = todos.find(t => t.content === content);
-        // if (index > -1) newTodos[index].done = !newTodos[index].done
         if (task === undefined) return  // Verificar que exista en el array
         const value = !task.done;
 
@@ -59,11 +58,28 @@ const App = () => {
         }
     }
 
-    const handleDeleteTask = (e, content) => {
-        const newTodos = [...todos];
-        const index = newTodos.findIndex(t => t.content === content);
-        if (index > -1) newTodos.splice(index, 1);
-        setTodos(newTodos);
+    const handleDeleteTask = async (e, content) => {
+
+        const task = todos.find(t => t.content === content);
+        if (task === undefined) return  // Verificar que exista en el array
+        
+        // Cambio en el servidor
+        const config = {
+            url: `${URL}/${task.id}`,
+            method: "DELETE"
+        };
+
+        try {
+            const response = await requestBackEnd(config);
+            if (!response.ok) throw new Error('Response not ok');
+            //UI
+            const newTodos = [...todos];
+            const index = newTodos.findIndex(t => t.content === content);
+            if (index > -1) newTodos.splice(index, 1);
+            setTodos(newTodos);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const handleCreateTask = async (content) => {

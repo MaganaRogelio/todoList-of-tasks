@@ -12,19 +12,53 @@ const App = () => {
 
     useEffect(() => {
         const getData = async () => {
-            const response = await fetch(URL);
-            const data = await response.json();
-            setTodos(data);
+            try {
+                const response = await fetch(URL);
+                const data = await response.json();
+                setTodos(data);
+            } catch (e) {
+                console.error(e);
+            }
         }
-
         getData()
     }, [])
 
-    const handleToogleStatus = (e, content) => {
-        const newTodos = [...todos];
-        const index = newTodos.findIndex(t => t.content === content);
-        if (index > -1) newTodos[index].done = !newTodos[index].done
-        setTodos(newTodos);
+    const changeProperty = (config, property, value) => {
+        return fetch(config.url, {
+            method: config.method,
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ [property]: value })
+        })
+    }
+
+    const handleToogleStatus = async (e, content) => {
+
+        const task = todos.find(t => t.content === content);
+        // if (index > -1) newTodos[index].done = !newTodos[index].done
+        if (task === undefined) return  // Verificar que exista en el array
+        const value = !task.done;
+        
+        // Cambio en el servidor
+        const config = {
+            url: `${URL}/${task.id}`,
+            method: "PATCH"
+        };
+
+        try {
+            const response = await changeProperty(config, 'done', value);
+            
+            if (!response.ok) throw new Error('Response not ok');
+            
+            //UI
+            const newTodos = [...todos];
+            const index = newTodos.findIndex(t => t.content === content);
+            newTodos[index].done = !newTodos[index].done;
+            setTodos(newTodos);
+        } catch (e) {
+            console.error(e);
+        }
     }
 
     const handleDeleteTask = (e, content) => {

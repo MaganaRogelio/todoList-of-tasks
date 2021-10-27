@@ -13,8 +13,8 @@ function TodoList(props) {
                     key={index}
                     done={task.done}
                     title={task.title}
-                    handleToogleStatus={(e) => props.handleToogleStatus(e, task.content)}
-                    handleDeleteTask={(e) => props.handleDeleteTask(e, task.content)}
+                    handleToogleStatus={(e) => props.handleToogleStatus(e, task.title)}
+                    handleDeleteTask={(e) => props.handleDeleteTask(e, task.title)}
                 />
             )}
         </div>

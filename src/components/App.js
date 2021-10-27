@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import Header from './Header'
-import TodoList from './TodoList'
-import Form from './Form'
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import Home from './Home'
+import TodoDetails from './TodoDetails'
 import '../css/app.css'
 
 const App = () => {
@@ -33,9 +33,9 @@ const App = () => {
         })
     }
 
-    const handleToogleStatus = async (e, content) => {
+    const handleToogleStatus = async (e, title) => {
 
-        const task = todos.find(t => t.content === content);
+        const task = todos.find(t => t.title === title);
         if (task === undefined) return  // Verificar que exista en el array
         const value = !task.done;
 
@@ -50,7 +50,7 @@ const App = () => {
             if (!response.ok) throw new Error('Response not ok');
             //UI
             const newTodos = [...todos];
-            const index = newTodos.findIndex(t => t.content === content);
+            const index = newTodos.findIndex(t => t.title === title);
             newTodos[index].done = !newTodos[index].done;
             setTodos(newTodos);
         } catch (e) {
@@ -58,11 +58,11 @@ const App = () => {
         }
     }
 
-    const handleDeleteTask = async (e, content) => {
+    const handleDeleteTask = async (e, title) => {
 
-        const task = todos.find(t => t.content === content);
+        const task = todos.find(t => t.title === title);
         if (task === undefined) return  // Verificar que exista en el array
-        
+
         // Cambio en el servidor
         const config = {
             url: `${URL}/${task.id}`,
@@ -74,7 +74,7 @@ const App = () => {
             if (!response.ok) throw new Error('Response not ok');
             //UI
             const newTodos = [...todos];
-            const index = newTodos.findIndex(t => t.content === content);
+            const index = newTodos.findIndex(t => t.title === title);
             if (index > -1) newTodos.splice(index, 1);
             setTodos(newTodos);
         } catch (e) {
@@ -82,10 +82,10 @@ const App = () => {
         }
     }
 
-    const handleCreateTask = async (content) => {
-        if (content !== '') {
-            const exist = todos.find(tsk => tsk.content === content);
-            if (exist) alert(`"${content}" is an task listed`)
+    const handleCreateTask = async (title) => {
+        if (title !== '') {
+            const exist = todos.find(tsk => tsk.title === title);
+            if (exist) alert(`"${title}" is an task listed`)
             else {
                 // Cambio en el servidor
                 const config = {
@@ -93,7 +93,7 @@ const App = () => {
                     method: "POST"
                 };
                 const data = {
-                    content,
+                    title,
                     done: false,
                 };
 
@@ -115,15 +115,27 @@ const App = () => {
 
     return (
         <div className="wrapper">
-            <div className="card frame">
-                <Header counter={filtered.length}
-                    show={show}
-                    toogleDone={setShow} />
-                <TodoList tasks={filtered}
-                    handleToogleStatus={handleToogleStatus}
-                    handleDeleteTask={handleDeleteTask} />
-                <Form handleCreateTask={handleCreateTask} />
-            </div>
+            <Router>
+                <div className="card frame">
+                    <Switch>
+                        <Route path="/" exact render={props =>
+                            <Home
+                                {...props}
+                                filtered={filtered}
+                                show={show}
+                                setShow={setShow}
+                                handleToogleStatus={handleToogleStatus}
+                                handleDeleteTask={handleDeleteTask}
+                                handleCreateTask={handleCreateTask}
+                            />
+                        } />
+                        <Route path="/details/:id" render={props =>
+                            <TodoDetails {...props} url={URL} />}
+                        />
+                        {/* <Route component={NotFound} /> */}
+                    </Switch>
+                </div>
+            </Router>
         </div>
     );
 }

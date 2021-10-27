@@ -8,17 +8,17 @@ const App = () => {
     const [todos, setTodos] = useState([]);
     const [show, setShow] = useState(true);
 
-    useEffect(() => setTodos([
-        { content: "Sesión 1 (JSX)", done: true },
-        { content: "Sesión 2 (Estado y propiedades)", done: true },
-        { content: "Sesión 3 (Ciclo de vida)", done: true },
-        { content: "Sesión 4 (Hooks)", done: false },
-        { content: "Sesión 5 (Hooks)", done: false },
-        { content: "Sesión 6 (Rutas)", done: false },
-        { content: "Sesión 7 (PWA)", done: false },
-        { content: "Sesión 8 (Material UI)", done: false },
-    ]), []
-    )
+    const URL = "http://localhost:4000/todos";
+
+    useEffect(() => {
+        const getData = async () => {
+            const response = await fetch(URL);
+            const data = await response.json();
+            setTodos(data);
+        }
+
+        getData()
+    }, [])
 
     const handleToogleStatus = (e, content) => {
         const newTodos = [...todos];

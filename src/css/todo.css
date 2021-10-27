@@ -1,3 +1,7 @@
+.list-item {
+    min-width: 40vw;
+}
+
 .done {
 	text-decoration: line-through;
 }

@@ -3,7 +3,7 @@
     {
       "id": 1,
       "content": "Sesión 1 (JSX)",
-      "done": false
+      "done": true
     },
     {
       "id": 2,
@@ -18,7 +18,7 @@
     {
       "id": 4,
       "content": "Sesión 4 (Hooks)",
-      "done": true
+      "done": false
     },
     {
       "id": 5,
@@ -39,6 +39,16 @@
       "id": 8,
       "content": "Sesión 8 (Material UI)",
       "done": false
+    },
+    {
+      "content": "Sesión 9 (Extra)",
+      "done": false,
+      "id": 9
+    },
+    {
+      "content": "Sesión 10",
+      "done": false,
+      "id": 10
     }
   ]
 }

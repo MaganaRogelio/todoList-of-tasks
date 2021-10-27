@@ -23,13 +23,13 @@ const App = () => {
         getData()
     }, [])
 
-    const changeProperty = (config, property, value) => {
+    const requestBackEnd = (config, data) => {
         return fetch(config.url, {
             method: config.method,
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ [property]: value })
+            body: JSON.stringify(data)
         })
     }
 
@@ -39,7 +39,7 @@ const App = () => {
         // if (index > -1) newTodos[index].done = !newTodos[index].done
         if (task === undefined) return  // Verificar que exista en el array
         const value = !task.done;
-        
+
         // Cambio en el servidor
         const config = {
             url: `${URL}/${task.id}`,
@@ -47,10 +47,8 @@ const App = () => {
         };
 
         try {
-            const response = await changeProperty(config, 'done', value);
-            
+            const response = await requestBackEnd(config, { done: value });
             if (!response.ok) throw new Error('Response not ok');
-            
             //UI
             const newTodos = [...todos];
             const index = newTodos.findIndex(t => t.content === content);
@@ -68,14 +66,31 @@ const App = () => {
         setTodos(newTodos);
     }
 
-    const handleCreateTask = (content) => {
+    const handleCreateTask = async (content) => {
         if (content !== '') {
-            const newTodos = [...todos];
-            const exist = newTodos.find(tsk => tsk.content === content);
+            const exist = todos.find(tsk => tsk.content === content);
             if (exist) alert(`"${content}" is an task listed`)
             else {
-                newTodos.push({ content, done: false });
-                setTodos(newTodos);
+                // Cambio en el servidor
+                const config = {
+                    url: URL,
+                    method: "POST"
+                };
+                const data = {
+                    content,
+                    done: false,
+                };
+
+                try {
+                    const response = await requestBackEnd(config, data);
+                    if (!response.ok) throw new Error('Response not ok');
+                    const task = await response.json();
+                    // UI
+                    setTodos(todos.concat([task]));
+                } catch (e) {
+                    console.error(e);
+                }
+
             }
         } else alert('Fill task content pls');
     }
